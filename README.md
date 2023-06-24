@@ -1,5 +1,2 @@
-# mc-film-mods
-Mods for my minecraft films
-
-## List of mods
-(check branches for more...)
+# Mars blocks
+A mod that adds few blocks and items for the FirstMarsling Film
