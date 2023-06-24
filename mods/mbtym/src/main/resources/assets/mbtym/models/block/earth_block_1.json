@@ -1,0 +1,46 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"0": "mbtym:block/earth_block",
+    "particle": "mbtym:block/earth_block"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [16, 16, 16],
+			"faces": {
+				"north": {"uv": [0, 2.5, 2.5, 5], "texture": "#0"},
+				"east": {"uv": [2.5, 0, 5, 2.5], "texture": "#0"},
+				"south": {"uv": [2.5, 2.5, 5, 5], "texture": "#0"},
+				"west": {"uv": [0, 0, 2.5, 2.5], "texture": "#0"},
+				"up": {"uv": [2.5, 7.5, 0, 5], "rotation": 270, "texture": "#0"},
+				"down": {"uv": [7.5, 0, 5, 2.5], "rotation": 90, "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 31.25, 0],
+			"scale": [4, 4, 4]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 31.75, 0],
+			"scale": [4, 4, 4]
+		},
+		"firstperson_righthand": {
+			"scale": [4, 4, 0.05]
+		},
+		"firstperson_lefthand": {
+			"scale": [4, 4, 0.47]
+		},
+		"ground": {
+			"translation": [0, 27.75, 0],
+			"scale": [4, 4, 4]
+		},
+		"gui": {
+			"rotation": [20, 45, 0],
+			"scale": [0.5, 0.5, 0.5]
+		}
+	}
+}
