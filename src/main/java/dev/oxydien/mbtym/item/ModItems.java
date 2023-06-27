@@ -1,8 +1,10 @@
 package dev.oxydien.mbtym.item;
 
 import dev.oxydien.mbtym.InitMod;
+import dev.oxydien.mbtym.entity.ModEntities;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.item.Item;
+import net.minecraft.item.SpawnEggItem;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -14,6 +16,7 @@ public class ModItems {
 
 	public  static final Item FINGER = registerItem("finger", new FingerItem(new QuiltItemSettings()));
 	public  static final Item SPIN = registerItem("spin", new SpinItem(new QuiltItemSettings().maxCount(128)));
+	public  static final Item TEST_CAR_SPAWN_EGG = registerItem("test_car_spawn_egg", new SpawnEggItem(ModEntities.TEST_CAR, 0x56ea5f, 0xffffff, new QuiltItemSettings()));
 
 	private static Item registerItem(String name, Item item)	 {
 		final Item NewItem = Registry.register(Registries.ITEM, new Identifier(InitMod.MOD_ID, name), item);
@@ -23,7 +26,14 @@ public class ModItems {
 		});
 		return NewItem;
 	}
+
+	public static void AddItemToGroup(Item item) {
+		ItemGroupEvents.modifyEntriesEvent(RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier(InitMod.MOD_ID,"mbtym")))
+			.register(content -> {
+				content.addItem(item);
+			});
+	}
 	public static void registerModItems() {
-		InitMod.LOGGER.info("Registering items!");
+		InitMod.Log("Registering items!");
 	}
 }

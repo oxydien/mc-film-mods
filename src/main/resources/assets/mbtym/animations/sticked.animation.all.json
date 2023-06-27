@@ -1,0 +1,89 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.test_car.idle": {
+			"loop": true,
+			"animation_length": 0.25,
+			"bones": {
+				"wheel_b_l": {
+					"rotation": {
+						"0.0": {
+							"vector": [-12.5, 0, 0]
+						},
+						"0.125": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"wheel_b_r": {
+					"rotation": {
+						"0.0": {
+							"vector": [-12.5, 0, 0]
+						},
+						"0.125": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"top": {
+					"scale": {
+						"0.0": {
+							"vector": [1, 1, 1]
+						},
+						"0.125": {
+							"vector": [1, 1.6, 1],
+							"easing": "easeInBounce"
+						}
+					}
+				}
+			}
+		},
+		"animation.test_car.ride": {
+			"loop": true,
+			"animation_length": 0.25,
+			"bones": {
+				"wheel_f_l": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.25": {
+							"vector": [360, 0, 0]
+						}
+					}
+				},
+				"wheel_f_r": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.25": {
+							"vector": [360, 0, 0]
+						}
+					}
+				},
+				"wheel_b_l": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.25": {
+							"vector": [360, 0, 0]
+						}
+					}
+				},
+				"wheel_b_r": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.25": {
+							"vector": [360, 0, 0]
+						}
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

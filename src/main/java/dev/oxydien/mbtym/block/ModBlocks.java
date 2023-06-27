@@ -35,6 +35,6 @@ public class ModBlocks {
 	}
 
 	public  static  void  registerModBlocks() {
-		InitMod.LOGGER.info("Registering blocks!");
+		InitMod.Log("Registering blocks!");
 	}
 }

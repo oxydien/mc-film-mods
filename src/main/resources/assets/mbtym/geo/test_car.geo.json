@@ -1,0 +1,77 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.sticked",
+				"texture_width": 128,
+				"texture_height": 128,
+				"visible_bounds_width": 4,
+				"visible_bounds_height": 2.5,
+				"visible_bounds_offset": [0, 0.75, 0]
+			},
+			"bones": [
+				{
+					"name": "main",
+					"pivot": [18, 0, 0],
+					"cubes": [
+						{"origin": [-11, 5, 19], "size": [22, 13, 1], "uv": [69, 41]},
+						{"origin": [-11, 4, -20], "size": [22, 1, 40], "uv": [0, 0]},
+						{"origin": [-11, 18, -5], "size": [22, 1, 25], "uv": [0, 41]},
+						{"origin": [-11, 8, -21], "size": [22, 1, 10], "pivot": [0, 9, -10], "rotation": [-117.5, 0, 0], "uv": [0, 67]},
+						{"origin": [-11, 5, -20], "size": [22, 5, 1], "uv": [69, 55]},
+						{"origin": [27, 5, -8], "size": [10, 5, 1], "pivot": [18, 0, 0], "rotation": [0, 90, 0], "uv": [0, 47]},
+						{"origin": [27, 5, -29], "size": [10, 5, 1], "pivot": [18, 0, 0], "rotation": [0, 90, 0], "uv": [0, 41]},
+						{"origin": [-1, 5, -29], "size": [10, 13, 1], "pivot": [18, 0, 0], "rotation": [0, 90, 0], "uv": [0, 14]},
+						{"origin": [-1, 5, -8], "size": [10, 13, 1], "pivot": [18, 0, 0], "rotation": [0, 90, 0], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "top",
+					"parent": "main",
+					"pivot": [0, 10, -15],
+					"cubes": [
+						{"origin": [-11, 10, -20], "size": [22, 1, 10], "uv": [64, 67]}
+					]
+				},
+				{
+					"name": "bone2",
+					"parent": "main",
+					"pivot": [18, 0, 0]
+				},
+				{
+					"name": "wheel_f_l",
+					"parent": "main",
+					"pivot": [11, 3, -14],
+					"cubes": [
+						{"origin": [10, 0, -17], "size": [2, 6, 6], "uv": [0, 28]}
+					]
+				},
+				{
+					"name": "wheel_b_l",
+					"parent": "main",
+					"pivot": [11, 3, 15],
+					"cubes": [
+						{"origin": [10, 0, 12], "size": [2, 6, 6], "uv": [22, 12]}
+					]
+				},
+				{
+					"name": "wheel_f_r",
+					"parent": "main",
+					"pivot": [-11, 3, -14],
+					"cubes": [
+						{"origin": [-12, 0, -17], "size": [2, 6, 6], "uv": [16, 24]}
+					]
+				},
+				{
+					"name": "wheel_b_r",
+					"parent": "main",
+					"pivot": [-11, 3, 15],
+					"cubes": [
+						{"origin": [-12, 0, 12], "size": [2, 6, 6], "uv": [22, 0]}
+					]
+				}
+			]
+		}
+	]
+}
