@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "paper_count=1": {
+      "model": "mbtym:block/papers/papers_block_1"
+    },
+    "paper_count=2": {
+      "model": "mbtym:block/papers/papers_block_2"
+    },
+    "paper_count=3": {
+      "model": "mbtym:block/papers/papers_block_3"
+    },
+    "paper_count=4": {
+      "model": "mbtym:block/papers/papers_block_4"
+    },
+    "paper_count=5": {
+      "model": "mbtym:block/papers/papers_block_5"
+    },
+    "paper_count=6": {
+      "model": "mbtym:block/papers/papers_block_6"
+    }
+  }
+}

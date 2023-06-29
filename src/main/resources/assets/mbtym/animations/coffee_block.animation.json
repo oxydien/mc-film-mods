@@ -1,0 +1,32 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"fill": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 0.79167,
+			"bones": {
+				"coffee": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, -0.4]
+						},
+						"0.7917": {
+							"vector": [0, -2, -0.4],
+							"easing": "easeInExpo"
+						}
+					},
+					"scale": {
+						"0.0": {
+							"vector": [1, 1.2, 1]
+						},
+						"0.7917": {
+							"vector": [1, 2.9, 1],
+							"easing": "easeInExpo"
+						}
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

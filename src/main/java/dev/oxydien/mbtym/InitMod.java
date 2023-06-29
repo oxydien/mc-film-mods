@@ -1,6 +1,7 @@
 package dev.oxydien.mbtym;
 
 import dev.oxydien.mbtym.block.ModBlocks;
+import dev.oxydien.mbtym.block.entity.ModBlockEntities;
 import dev.oxydien.mbtym.entity.ModEntities;
 import dev.oxydien.mbtym.entity.entities.TestCarEntity;
 import dev.oxydien.mbtym.fluid.ModFluid;
@@ -20,12 +21,11 @@ import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import software.bernie.geckolib.GeckoLib;
 
 public class InitMod implements ModInitializer {
 	public static final String MOD_ID = "mbtym";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-
-
 
 	// Create a custom item group
 	public static final ItemGroup CUSTOM_GROUP = FabricItemGroup.builder()
@@ -46,6 +46,7 @@ public class InitMod implements ModInitializer {
 		ModBlocks.registerModBlocks();
 		ModEntities.registerModEntities();
 		FabricDefaultAttributeRegistry.register(ModEntities.TEST_CAR, TestCarEntity.setAttributes());
+		ModBlockEntities.registerBlockEntities();
 		ModFluid.register();
 		Log("Loaded!");
 	}

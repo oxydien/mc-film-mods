@@ -1,7 +1,7 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"animation.test_car.idle": {
+		"idle": {
 			"loop": true,
 			"animation_length": 0.25,
 			"bones": {
@@ -38,7 +38,7 @@
 				}
 			}
 		},
-		"animation.test_car.ride": {
+		"ride": {
 			"loop": true,
 			"animation_length": 0.25,
 			"bones": {

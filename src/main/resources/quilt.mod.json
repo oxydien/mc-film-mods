@@ -13,13 +13,15 @@
 			},
 			"contact": {
 				"homepage": "https://github.com/",
+				"help" : "There is no help",
 				"sources": "https://github.com/"
 			},
 			"icon": "assets/mbtym/icon.png"
 		},
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"entrypoints": {
-			"init": "dev.oxydien.mbtym.InitMod"
+			"init": "dev.oxydien.mbtym.InitMod",
+			"client": "dev.oxydien.mbtym.ClientInitMod"
 		},
 		"depends": [
 			{

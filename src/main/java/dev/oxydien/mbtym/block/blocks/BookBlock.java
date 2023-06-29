@@ -79,6 +79,6 @@ public class BookBlock extends Block {
 		BlockPos blockBelowPos = pos.down();
 		BlockState blockBelowState = world.getBlockState(blockBelowPos);
 		Block blockBelow = blockBelowState.getBlock();
-		return !blockBelow.isTranslucent(blockBelowState, world, blockBelowPos);
+		return !blockBelow.isShapeFullCube(blockBelowState, world, blockBelowPos);
 	}
 }

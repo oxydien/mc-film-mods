@@ -15,7 +15,7 @@ public class ModEntities {
 	public static final EntityType<TestCarEntity> TEST_CAR = Registry.register(Registries.ENTITY_TYPE,
 		new Identifier(InitMod.MOD_ID,"test_car"),
 		FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, TestCarEntity::new)
-			.dimensions(EntityDimensions.fixed(2.3f,1.8f)).build());
+			.dimensions(EntityDimensions.changing(2.3f,1.8f)).build());
 
 	public static void registerModEntities() {
 		InitMod.LOGGER.info("Registering entities!");
