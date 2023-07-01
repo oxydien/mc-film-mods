@@ -1,0 +1,17 @@
+name: Cleanup Artifacts
+
+on:
+  schedule:
+    - cron: "0 0 * * 0" # Run every Sunday at midnight UTC
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Remove artifacts
+        run: |
+          find . -name "mbtym-artifacts-*" -type f -mtime +7 -delete
