@@ -12,8 +12,8 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 17
-    - name: List
-      run: ls *
+    - name: Make gradlew executable
+      run: chmod +x gradlew
     - name: Check
       run: ls -l gradlew
     - name: Build artifacts
