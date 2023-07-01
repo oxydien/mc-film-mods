@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "mbtym:block/timer"
+    }
+  }
+}

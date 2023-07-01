@@ -34,6 +34,5 @@ public class CoffeeMachineBlock extends BlockWithEntity {
 	@Override
 	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
 		return VoxelShapes.cuboid(0.23f,0f,0.1f,0.77f,0.8f,0.93f);
-
 	}
 }

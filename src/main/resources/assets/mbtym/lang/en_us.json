@@ -1,13 +1,17 @@
 {
   "item.mbtym.finger": "Finger",
   "item.mbtym.spin": "SPIN!",
+  "item.mbtym.tablet": "Tablet",
   "item.mbtym.heavy_air_bucket": "Heavy Air Bucket",
-  "item.mbtym.test_car_spawn_egg": "Crash client :D",
+  "item.mbtym.test_car_spawn_egg": "CAR",
 
+  "block.mbtym.timer": "Timer",
   "block.mbtym.earth_block": "Earth Block",
   "block.mbtym.books_block": "Books",
   "block.mbtym.papers_block": "Papers",
   "block.mbtym.coffee_machine_block": "Coffee Machine",
 
-  "itemGroup.mbtym.mbtym": "Masa Blocks"
+  "itemGroup.mbtym.mbtym": "Masa Blocks",
+
+  "entity.mbtym.test_car": "CAR"
 }

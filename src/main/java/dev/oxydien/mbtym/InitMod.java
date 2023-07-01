@@ -26,6 +26,7 @@ import software.bernie.geckolib.GeckoLib;
 public class InitMod implements ModInitializer {
 	public static final String MOD_ID = "mbtym";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+	public static boolean DoDebug = true;
 
 	// Create a custom item group
 	public static final ItemGroup CUSTOM_GROUP = FabricItemGroup.builder()
@@ -35,6 +36,11 @@ public class InitMod implements ModInitializer {
 
 	public static void Log(String message, Object... var2) {
 		LOGGER.info("<MBTYM>: " + message, var2);
+	}
+	public static void Debug(String message, Object... var2) {
+		if (DoDebug) {
+			LOGGER.info("<MBTYM> DEBUG: " + message, var2);
+		}
 	}
 
 	@Override

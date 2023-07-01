@@ -1,10 +1,7 @@
 package dev.oxydien.mbtym.block;
 
 import dev.oxydien.mbtym.InitMod;
-import dev.oxydien.mbtym.block.blocks.BookBlock;
-import dev.oxydien.mbtym.block.blocks.EarthBlock;
-import dev.oxydien.mbtym.block.blocks.PapersBlock;
-import dev.oxydien.mbtym.block.blocks.CoffeeMachineBlock;
+import dev.oxydien.mbtym.block.blocks.*;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -27,6 +24,7 @@ public class ModBlocks {
 		new Identifier(InitMod.MOD_ID, "coffee_machine_block"),
 		new CoffeeMachineBlock(QuiltBlockSettings.copyOf(Blocks.STONE).nonOpaque()));
 
+	public static Block TIMER_BLOCK = registerblock("timer", TimerBlock.TIMER_BLOCK);
 
 	private  static Block registerblock(String name, Block block) {
 		registerBlockItem(name,block);

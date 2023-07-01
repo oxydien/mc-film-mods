@@ -10,12 +10,14 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
+import static net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder.*;
+
 
 public class ModEntities {
 	public static final EntityType<TestCarEntity> TEST_CAR = Registry.register(Registries.ENTITY_TYPE,
 		new Identifier(InitMod.MOD_ID,"test_car"),
-		FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, TestCarEntity::new)
-			.dimensions(EntityDimensions.changing(2.3f,1.8f)).build());
+		create(SpawnGroup.CREATURE, TestCarEntity::new)
+			.dimensions(EntityDimensions.changing(2.3f,1.3f)).build());
 
 	public static void registerModEntities() {
 		InitMod.LOGGER.info("Registering entities!");
