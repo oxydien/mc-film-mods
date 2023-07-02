@@ -69,12 +69,14 @@
 	],
 	"display": {
 		"thirdperson_righthand": {
-			"translation": [0, 2.5, 0],
-			"scale": [0.3, 0.3, 0.3]
+			"rotation": [99, 0, 0],
+			"translation": [0, 6.5, 5.5],
+			"scale": [0.6, 0.6, 0.6]
 		},
 		"thirdperson_lefthand": {
-			"translation": [0, 2.25, 0],
-			"scale": [0.3, 0.3, 0.3]
+			"rotation": [91, 0, 0],
+			"translation": [-0.75, 9.25, 6.75],
+			"scale": [0.8, 0.8, 0.8]
 		},
 		"firstperson_righthand": {
 			"rotation": [90, 0, 0],
@@ -101,7 +103,7 @@
 			"scale": [2, 2, 2]
 		},
 		"fixed": {
-			"rotation": [-90, 0, 0],
+			"rotation": [-90, 90, 0],
 			"translation": [0, -1, -7.75]
 		}
 	}
