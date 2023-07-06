@@ -6,7 +6,6 @@ import io.wispforest.owo.ui.base.BaseUIModelScreen;
 import io.wispforest.owo.ui.component.ButtonComponent;
 import io.wispforest.owo.ui.component.CheckboxComponent;
 import io.wispforest.owo.ui.component.DiscreteSliderComponent;
-import io.wispforest.owo.ui.component.SliderComponent;
 import io.wispforest.owo.ui.container.FlowLayout;
 import net.minecraft.util.Identifier;
 
