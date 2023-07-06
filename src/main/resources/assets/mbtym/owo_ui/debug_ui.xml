@@ -1,0 +1,149 @@
+<owo-ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/wisp-forest/owo-lib/1.20/owo-ui.xsd">
+    <components>
+        <flow-layout direction="vertical">
+            <children>
+                <label>
+                    <text translate="true">ui.debug_ui.text.label</text>
+                    <shadow>true</shadow>
+
+                    <positioning type="relative">50,0</positioning>
+                    <margins>
+                        <all>8</all>
+                    </margins>
+                </label>
+
+                <scroll direction="vertical">
+                    <flow-layout direction="vertical" id="button-container">
+                        <children>
+                            <label>
+                                <text>?</text>
+                                <tooltip-text>Keep in mind if you crash the game
+  using this it's your fault</tooltip-text>
+                                <shadow>false</shadow>
+                                <positioning type="relative">95,0</positioning>
+                            </label>
+                            <item>
+                                <stack>mbtym:debug_item</stack>
+                                <positioning type="absolute">0,0</positioning>
+                            </item>
+                            <label>
+                                <text translate="true">ui.debug_ui.text.debug_control</text>
+                                <shadow>true</shadow>
+
+                                <positioning type="absolute">20,5</positioning>
+                            </label>
+                            <checkbox id="debug-checkbox">
+                                <text>Do all debug</text>
+                                <tooltip-text>This controls all debug</tooltip-text>
+                                <positioning type="absolute">0,20</positioning>
+                            </checkbox>
+                            <box>
+                                <color>#FFFFFF</color>
+                                <fill>true</fill>
+                                <direction>top-to-bottom</direction>
+
+                                <sizing>
+                                    <vertical method="fixed">2</vertical>
+                                    <horizontal method="fill">100</horizontal>
+                                </sizing>
+
+                                <positioning type="absolute">0,42</positioning>
+                            </box>
+                            <item>
+                                <stack>mbtym:test_car_spawn_egg</stack>
+                                <positioning type="absolute">0,45</positioning>
+                            </item>
+                            <label>
+                                <text translate="true">ui.debug_ui.text.car</text>
+                                <shadow>true</shadow>
+                                <positioning type="absolute">20,50</positioning>
+                            </label>
+                            <label>
+                                <text translate="true">ui.debug_ui.text.car_speed</text>
+                                <positioning type="absolute">0,65</positioning>
+                            </label>
+                            <discrete-slider min="0.01" max="1.30" id="car-speed">
+                                <positioning type="absolute">0,75</positioning>
+                                <sizing>
+                                    <horizontal method="fixed">120</horizontal>
+                                    <vertical method="fixed">20</vertical>
+                                </sizing>
+                                <decimal-places>2</decimal-places>
+                                <tooltip-text>Changes the car speed</tooltip-text>
+                            </discrete-slider>
+                            <button id="car-speed-default">
+                                <text>D</text>
+                                <tooltip-text>Load default</tooltip-text>
+                                <positioning type="absolute">125,75</positioning>
+                                <sizing>
+                                    <horizontal method="fixed">20</horizontal>
+                                    <vertical method="fixed">20</vertical>
+                                </sizing>
+                            </button>
+                            <label>
+                                <text translate="true">ui.debug_ui.text.car_acceleration</text>
+                                <positioning type="absolute">0,97</positioning>
+                            </label>
+                            <discrete-slider min="0.001" max="1.30" id="car-acceleration">
+                                <positioning type="absolute">0,110</positioning>
+                                <sizing>
+                                    <horizontal method="fixed">120</horizontal>
+                                    <vertical method="fixed">20</vertical>
+                                </sizing>
+                                <decimal-places>3</decimal-places>
+                                <tooltip-text>Changes the car acceleration</tooltip-text>
+                            </discrete-slider>
+                            <button id="car-acceleration-default">
+                                <text>D</text>
+                                <tooltip-text>Load default</tooltip-text>
+                                <positioning type="absolute">125,110</positioning>
+                                <sizing>
+                                    <horizontal method="fixed">20</horizontal>
+                                    <vertical method="fixed">20</vertical>
+                                </sizing>
+                            </button>
+                        </children>
+                        <horizontal-alignment>center</horizontal-alignment>
+                        <vertical-alignment>center</vertical-alignment>
+                        <allow-overflow>true</allow-overflow>
+                        <sizing>
+                            <vertical method="fill">200</vertical>
+                            <horizontal method="fill">100</horizontal>
+                        </sizing>
+                    </flow-layout>
+                    <sizing>
+                        <vertical method="fill">60</vertical>
+                        <horizontal method="fill">50</horizontal>
+                    </sizing>
+                    <horizontal-alignment>center</horizontal-alignment>
+                    <vertical-alignment>center</vertical-alignment>
+                    <padding>
+                        <all>10</all>
+                    </padding>
+
+                    <surface>
+                        <panel dark="true"/>
+                    </surface>
+                </scroll>
+                <button id="close-button">
+                    <text>Close</text>
+                    <margins>
+                        <top>10</top>
+                    </margins>
+                    <sizing>
+                        <vertical method="fixed">20</vertical>
+                        <horizontal method="fill">30</horizontal>
+                    </sizing>
+                </button>
+            </children>
+
+            <horizontal-alignment>center</horizontal-alignment>
+            <vertical-alignment>center</vertical-alignment>
+
+            <surface>
+                <flat>#7A000000</flat>
+            </surface>
+        </flow-layout>
+    </components>
+</owo-ui>

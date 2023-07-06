@@ -20,7 +20,7 @@ public class ModEntities {
 			.dimensions(EntityDimensions.changing(2.3f,1.3f)).build());
 
 	public static void registerModEntities() {
-		InitMod.LOGGER.info("Registering entities!");
+		InitMod.Log("Registering entities!");
 	}
 }
 

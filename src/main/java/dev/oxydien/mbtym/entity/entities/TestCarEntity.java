@@ -1,5 +1,6 @@
 package dev.oxydien.mbtym.entity.entities;
 
+import dev.oxydien.mbtym.InitMod;
 import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -7,6 +8,7 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
@@ -30,76 +32,167 @@ public class TestCarEntity extends AnimalEntity implements GeoEntity {
 	public ActionResult interactMob(PlayerEntity player, Hand hand) {
 		if (!this.hasPassengers()) {
 			player.startRiding(this);
-
+			LivingEntity passenger = getPrimaryPassenger();
+			assert passenger != null;
+			if (passenger.getType() == EntityType.PLAYER) {
+				InitMod.Log("Player ",passenger);
+			}
 			return super.interactMob(player, hand);
 		}
 
 		return super.interactMob(player, hand);
 	}
 
-	private float speed = 0.0f; // Current speed
-	private boolean lastGoForward = true;
+	private float carSpeed = 0.0f;
+	public static float DEFAULT_ACCELERATION = 0.014f;
+	public static float DEFAULT_MAX_SPEED = 0.6f;
+	private static float ACCELERATION = DEFAULT_ACCELERATION;
+	private static float MAX_SPEED = DEFAULT_MAX_SPEED;
+	private float carRotation = 0.0f;
+	public static float ROTATION_AMOUNT = 0.3f;
+	public static float MAX_ROTATION = 15.0f;
+
+	public static void SetMaxSpeed(double speed) {
+		MAX_SPEED = (float) speed;
+	}
+
+	public static double GetMaxSpeed() {
+		return MAX_SPEED;
+	}
+	public static void SetAcceleration(double acceleration) {
+		ACCELERATION = (float) acceleration;
+	}
+
+	public static double GetAcceleration() {
+		return ACCELERATION;
+	}
 
 	@Override
 	public void travel(Vec3d pos) {
 		if (this.isAlive()) {
-			float acceleration = 0.008f;
+			this.prevYaw = getYaw();
+			this.prevPitch = getPitch();
 			if (this.hasPassengers()) {
+				// NOT GO FASTER THAN MAX SPEED
+				if (carSpeed > MAX_SPEED)
+					carSpeed = MAX_SPEED;
+
 				LivingEntity passenger = getPrimaryPassenger();
-				this.prevYaw = getYaw();
-				this.prevPitch = getPitch();
-
 				assert passenger != null;
-				setPitch(passenger.getPitch() * 0.5f);
-				setRotation(getYaw(), getPitch());
-
-				this.bodyYaw = this.getYaw();
-				this.headYaw = this.bodyYaw;
-
 				float z = passenger.forwardSpeed;
 
-				if (z <= 0)
-					z *= 0.25f;
-
 				if (z != 0) {
-					boolean goForward = z > 0;
-					// Maximum speed
-					float maxSpeed = 0.6f;
-					if (goForward != lastGoForward) {
-						speed = Math.max(0, speed - acceleration * 2);
-					} else if (speed < maxSpeed) {
-						speed += acceleration;
-						if (speed > maxSpeed)
-							speed = maxSpeed;
-					}
-					if (speed == 0) {
-						lastGoForward = goForward;
-					}
-				} else {
-					speed = Math.max(0, speed - acceleration);
-				}
-
-				this.setMovementSpeed(speed);
-				super.travel(new Vec3d(0, pos.y, z + (lastGoForward ? speed : -speed)));
-
-				if ((passenger.sidewaysSpeed > 0 || passenger.sidewaysSpeed < 0)&& speed != 0) {
-						float rotationAmount = (passenger.sidewaysSpeed > 0) ? -8 : 8;
-						if (passenger.forwardSpeed < 0) {
-							rotationAmount = -rotationAmount;
+					// Going forwards
+					if (z > 0) {
+						if (carSpeed < MAX_SPEED) {
+							carSpeed += ACCELERATION;
+							if (carSpeed > MAX_SPEED)
+								carSpeed = MAX_SPEED;
 						}
-
-						float rotationSpeed = Math.abs(speed) * 0.9f;
-						rotationAmount *= rotationSpeed;
-
-						this.setYaw(this.getYaw() + rotationAmount);
-						passenger.setYaw(passenger.getYaw() + rotationAmount);
-						this.setHeadYaw(this.getYaw() + (passenger.sidewaysSpeed > 0 ? -15f : 15f));
-						this.setRotation(this.getYaw(), this.getPitch());
+					}
+					// Going backwards
+					else {
+						if (carSpeed > -MAX_SPEED) {
+							carSpeed -= ACCELERATION;
+							if (carSpeed < -MAX_SPEED)
+								carSpeed = -MAX_SPEED;
+						}
+					}
 				}
+				// slowly slow down
+				else if (carSpeed != 0){
+					carSpeed += (carSpeed > 0) ? -(ACCELERATION / 2) : (ACCELERATION / 2);
+					if (Math.abs(carSpeed) <= ACCELERATION / 2) {
+						carSpeed = 0;
+					}
+				}
+
+				// if trying to go sideways
+				float rotationAmount = carRotation;
+				if (passenger.sidewaysSpeed > 0 || passenger.sidewaysSpeed < 0) {
+					// rotate to that direction
+					carRotation += (passenger.sidewaysSpeed > 0) ? -ROTATION_AMOUNT : ROTATION_AMOUNT;
+					if (carRotation > MAX_ROTATION)
+						carRotation = MAX_ROTATION;
+					if (carRotation < -MAX_ROTATION)
+						carRotation = -MAX_ROTATION;
+					// if going on reverse then reverse the rotation
+					if (carSpeed < 0) {
+						rotationAmount = -rotationAmount;
+					}
+				}
+				// else take the rotation back to 0
+				else if (carRotation != 0){
+					if (carSpeed >= 0) {
+						carRotation += (carRotation > 0) ? -(ROTATION_AMOUNT * 3) : (ROTATION_AMOUNT * 3);
+						if (Math.abs(carRotation) <= ROTATION_AMOUNT * 3) {
+							carRotation = 0;
+						}
+					}
+					else {
+						carRotation += (carRotation > 0) ? -(ROTATION_AMOUNT) : (ROTATION_AMOUNT);
+						if (Math.abs(carRotation) <= ROTATION_AMOUNT) {
+							carRotation = 0;
+						}
+					}
+				}
+				float rotationSpeed = Math.abs(carSpeed) * 0.9f;
+				rotationAmount *= rotationSpeed;
+
+				// model rotation and rotation
+				if (carSpeed != 0) {
+					this.setYaw(this.getYaw() + rotationAmount);
+					passenger.setYaw(passenger.getYaw() + rotationAmount);
+					if (carSpeed > 0) {
+						this.setHeadYaw(this.getYaw() + carRotation * 3);
+					}
+					this.setRotation(this.getYaw(), this.getPitch());
+				}
+				else {
+					this.setHeadYaw(this.getYaw() + carRotation);
+					this.setRotation(this.getYaw(), this.getPitch());
+				}
+
+				// Debug chat message
+				if (InitMod.DoDebug) {
+					passenger.sendSystemMessage(
+						Text.of(
+							String.format(
+								"Speed: %.1f / %.0f; Rotation: %.2f / %.2f; Yaw %.2f; %s",
+								carSpeed * 10,
+								MAX_SPEED * 10,
+								carRotation,
+								MAX_ROTATION,
+								this.getYaw(),
+								(Math.signum(carSpeed) == 1) ? "Forwards" : (Math.signum(carSpeed) == -1) ? "Backwards" : "NOWAY"
+							)));
+				}
+
+				this.bodyYaw = this.getYaw();
+				this.headYaw = this.getHeadYaw();
+				// Same direction
+				if ((carSpeed > 0 && passenger.forwardSpeed > 0) ||
+					(carSpeed < 0 && passenger.forwardSpeed < 0)) {
+					this.setMovementSpeed(Math.abs(carSpeed));
+				// Opposite direction
+				} else if ((carSpeed < 0 && passenger.forwardSpeed > 0) ||
+					(carSpeed > 0 && passenger.forwardSpeed < 0)) {
+					this.setMovementSpeed(-Math.abs(carSpeed));
+				// zero
+				} else {
+					this.setMovementSpeed(Math.abs(carSpeed));
+				}
+				super.travel(new Vec3d(0, pos.y, z + carSpeed));
 			} else {
-				speed = Math.max(0, speed - acceleration * 2);
-				this.setMovementSpeed(speed);
-				super.travel(new Vec3d(0, pos.y, pos.z + (lastGoForward ? speed : -speed)));
+				carSpeed += (carSpeed > 0) ? -(ACCELERATION) : (ACCELERATION);
+				if (Math.abs(carSpeed) <= ACCELERATION) {
+					carSpeed = 0;
+				}
+				this.setMovementSpeed(Math.abs(carSpeed));
+				this.setRotation(this.getYaw(), this.getPitch());
+				this.bodyYaw = this.getYaw();
+				this.headYaw = this.bodyYaw;
+				super.travel(new Vec3d(0, pos.y, pos.z + carSpeed));
 			}
 		}
 	}

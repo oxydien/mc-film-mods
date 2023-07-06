@@ -26,6 +26,7 @@ public class ModItems {
 	public static final Item TELEPHONE = registerItem("telephone", new Item(new QuiltItemSettings().rarity(Rarity.RARE)));
 	public static final Item TELEPHONE_USED = registerItem("telephone_used", new TelephoneItem(new QuiltItemSettings().rarity(Rarity.EPIC)));
 	public static final Item CUP_OF_COFFEE = registerItem("cup_of_coffee", new HoneyBottleItem(new QuiltItemSettings().food(FoodComponents.HONEY_BOTTLE).maxCount(16)));
+	public static final Item DEBUG_ITEM = registerItem("debug_item", new DebugItem(new QuiltItemSettings()));
 	private static Item registerItem(String name, Item item)	 {
 		final Item NewItem = Registry.register(Registries.ITEM, new Identifier(InitMod.MOD_ID, name), item);
 		ItemGroupEvents.modifyEntriesEvent(RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier(InitMod.MOD_ID,"mbtym")))

@@ -7,6 +7,7 @@
   "item.mbtym.telephone_used": "Using the TELEPHONE",
   "item.mbtym.heavy_air_bucket": "Heavy Air Bucket",
   "item.mbtym.test_car_spawn_egg": "CAR",
+  "item.mbtym.debug_item": "Debug item",
 
   "block.mbtym.timer": "Timer",
   "block.mbtym.earth_block": "Earth Block",
@@ -16,5 +17,12 @@
 
   "itemGroup.mbtym.mbtym": "Masa Blocks",
 
-  "entity.mbtym.test_car": "CAR"
+  "entity.mbtym.test_car": "CAR",
+
+
+  "ui.debug_ui.text.label": "MBTYM gui",
+  "ui.debug_ui.text.debug_control": "Debug",
+  "ui.debug_ui.text.car": "Car settings",
+  "ui.debug_ui.text.car_speed": "Car speed",
+  "ui.debug_ui.text.car_acceleration": "Car acceleration"
 }
