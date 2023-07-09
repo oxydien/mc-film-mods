@@ -73,21 +73,25 @@ public class TestCarEntity extends AnimalEntity implements GeoEntity {
 			this.prevYaw = getYaw();
 			this.prevPitch = getPitch();
 			if (this.hasPassengers()) {
-				// NOT GO FASTER THAN MAX SPEED
-				if (carSpeed > MAX_SPEED)
-					carSpeed = MAX_SPEED;
-
 				LivingEntity passenger = getPrimaryPassenger();
 				assert passenger != null;
-				float z = passenger.forwardSpeed;
+				float forwardSpeed = passenger.forwardSpeed;
 
-				if (z != 0) {
+				// if player tries to move
+				if (forwardSpeed != 0) {
 					// Going forwards
-					if (z > 0) {
+					if (forwardSpeed > 0) {
 						if (carSpeed < MAX_SPEED) {
 							carSpeed += ACCELERATION;
 							if (carSpeed > MAX_SPEED)
 								carSpeed = MAX_SPEED;
+						}
+						else {
+							carSpeed = MAX_SPEED;
+						}
+						// slow down faster
+						if (carSpeed < 0) {
+							carSpeed += ACCELERATION;
 						}
 					}
 					// Going backwards
@@ -96,6 +100,13 @@ public class TestCarEntity extends AnimalEntity implements GeoEntity {
 							carSpeed -= ACCELERATION;
 							if (carSpeed < -MAX_SPEED)
 								carSpeed = -MAX_SPEED;
+						}
+						else {
+							carSpeed = -MAX_SPEED;
+						}
+						// slow down faster
+						if (carSpeed > 0) {
+							carSpeed -= ACCELERATION;
 						}
 					}
 				}
@@ -107,8 +118,9 @@ public class TestCarEntity extends AnimalEntity implements GeoEntity {
 					}
 				}
 
-				// if trying to go sideways
-				float rotationAmount = carRotation;
+				// if player is trying to go sideways
+				float rotationSpeed = Math.abs(carSpeed) * 0.9f;
+				float rotationAmount = carRotation * rotationSpeed;
 				if (passenger.sidewaysSpeed > 0 || passenger.sidewaysSpeed < 0) {
 					// rotate to that direction
 					carRotation += (passenger.sidewaysSpeed > 0) ? -ROTATION_AMOUNT : ROTATION_AMOUNT;
@@ -130,68 +142,70 @@ public class TestCarEntity extends AnimalEntity implements GeoEntity {
 						}
 					}
 					else {
-						carRotation += (carRotation > 0) ? -(ROTATION_AMOUNT) : (ROTATION_AMOUNT);
-						if (Math.abs(carRotation) <= ROTATION_AMOUNT) {
+						// carRotation += (carRotation > 0) ? -(ROTATION_AMOUNT) : (ROTATION_AMOUNT);
+						// if (Math.abs(carRotation) <= ROTATION_AMOUNT) {
 							carRotation = 0;
-						}
+						// }
 					}
 				}
-				float rotationSpeed = Math.abs(carSpeed) * 0.9f;
-				rotationAmount *= rotationSpeed;
 
 				// model rotation and rotation
 				if (carSpeed != 0) {
-					this.setYaw(this.getYaw() + rotationAmount);
-					passenger.setYaw(passenger.getYaw() + rotationAmount);
-					if (carSpeed > 0) {
-						this.setHeadYaw(this.getYaw() + carRotation * 3);
+					if (this.getWorld().isClient()) {
+						this.setYaw(this.getYaw() + rotationAmount);
+						this.bodyYaw = this.getYaw() + rotationAmount;
+						passenger.setYaw(passenger.getYaw() + rotationAmount);
+						if (carSpeed > 0) {
+							this.setHeadYaw(this.getYaw() + carRotation * 3);
+							this.headYaw = this.getHeadYaw() + carRotation * 3;
+						}
+						this.setRotation(this.getYaw(), this.getPitch());
 					}
-					this.setRotation(this.getYaw(), this.getPitch());
+					this.serverYaw = this.getYaw() + rotationAmount;
 				}
 				else {
+					this.serverYaw = this.getYaw();
 					this.setHeadYaw(this.getYaw() + carRotation);
 					this.setRotation(this.getYaw(), this.getPitch());
 				}
 
 				// Debug chat message
-				if (InitMod.DoDebug) {
+				if (InitMod.DoDebug && !this.getWorld().isClient()) {
 					passenger.sendSystemMessage(
 						Text.of(
 							String.format(
-								"Speed: %.1f / %.0f; Rotation: %.2f / %.2f; Yaw %.2f; %s",
+								"Sp %.1f / %.1f;Rot %.2f / %.2f;Yaw %.2f; %s;Pos %.1f %.1f %.1f",
 								carSpeed * 10,
 								MAX_SPEED * 10,
 								carRotation,
 								MAX_ROTATION,
 								this.getYaw(),
-								(Math.signum(carSpeed) == 1) ? "Forwards" : (Math.signum(carSpeed) == -1) ? "Backwards" : "NOWAY"
+								(Math.signum(carSpeed) == 1) ? "+" : (Math.signum(carSpeed) == -1) ? "-" : "0",
+								this.getPos().x,
+								this.getPos().y,
+								this.getPos().z
 							)));
 				}
 
-				this.bodyYaw = this.getYaw();
-				this.headYaw = this.getHeadYaw();
 				// Same direction
-				if ((carSpeed > 0 && passenger.forwardSpeed > 0) ||
-					(carSpeed < 0 && passenger.forwardSpeed < 0)) {
+				if ((carSpeed > 0 && forwardSpeed > 0) ||
+					(carSpeed < 0 && forwardSpeed < 0)) {
 					this.setMovementSpeed(Math.abs(carSpeed));
 				// Opposite direction
-				} else if ((carSpeed < 0 && passenger.forwardSpeed > 0) ||
-					(carSpeed > 0 && passenger.forwardSpeed < 0)) {
+				} else if ((carSpeed < 0 && forwardSpeed > 0) ||
+					(carSpeed > 0 && forwardSpeed < 0)) {
 					this.setMovementSpeed(-Math.abs(carSpeed));
 				// zero
 				} else {
 					this.setMovementSpeed(Math.abs(carSpeed));
 				}
-				super.travel(new Vec3d(0, pos.y, z + carSpeed));
+				super.travel(new Vec3d(0, pos.y, forwardSpeed + carSpeed));
 			} else {
 				carSpeed += (carSpeed > 0) ? -(ACCELERATION) : (ACCELERATION);
 				if (Math.abs(carSpeed) <= ACCELERATION) {
 					carSpeed = 0;
 				}
 				this.setMovementSpeed(Math.abs(carSpeed));
-				this.setRotation(this.getYaw(), this.getPitch());
-				this.bodyYaw = this.getYaw();
-				this.headYaw = this.bodyYaw;
 				super.travel(new Vec3d(0, pos.y, pos.z + carSpeed));
 			}
 		}
@@ -215,14 +229,11 @@ public class TestCarEntity extends AnimalEntity implements GeoEntity {
 
 		if (entity instanceof LivingEntity passenger) {
 			moveFunction.accept(entity, getX(), getY() - 0.1f, getZ());
-
-			this.prevPitch = passenger.prevPitch;
 		}
 	}
 
 	public static DefaultAttributeContainer.Builder setAttributes() {
 		return AnimalEntity.createAttributes()
-			.add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.5f)
 			.add(EntityAttributes.GENERIC_MAX_HEALTH, 1D);
 	}
 

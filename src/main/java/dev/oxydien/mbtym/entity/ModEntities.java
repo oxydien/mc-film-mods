@@ -16,7 +16,7 @@ public class ModEntities {
 	public static final EntityType<TestCarEntity> TEST_CAR = Registry.register(Registries.ENTITY_TYPE,
 		new Identifier(InitMod.MOD_ID,"test_car"),
 		create(SpawnGroup.CREATURE, TestCarEntity::new)
-			.dimensions(EntityDimensions.changing(2.3f,1.3f)).build());
+			.dimensions(EntityDimensions.changing(1.8f,1.3f)).build());
 
 	public static void registerModEntities() {
 		InitMod.Log("Registering entities!");

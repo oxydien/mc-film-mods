@@ -26,7 +26,7 @@ import software.bernie.geckolib.GeckoLib;
 public class InitMod implements ModInitializer {
 	public static final String MOD_ID = "mbtym";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-	public static boolean DoDebug = true;
+	public static boolean DoDebug = false;
 
 	// Create a custom item group
 	public static final ItemGroup CUSTOM_GROUP = FabricItemGroup.builder()

@@ -8,12 +8,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
+import org.quiltmc.loader.api.minecraft.ClientOnly;
 
 public class DebugItem extends Item {
 	public DebugItem(Settings settings) {
 		super(settings);
 	}
 
+	@ClientOnly
 	@Override
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
 		if (world.isClient()) {
