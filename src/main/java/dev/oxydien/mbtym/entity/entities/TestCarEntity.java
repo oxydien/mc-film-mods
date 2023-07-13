@@ -1,13 +1,11 @@
 package dev.oxydien.mbtym.entity.entities;
 
 import dev.oxydien.mbtym.InitMod;
-import io.netty.handler.codec.DatagramPacketDecoder;
 import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandler;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.PassiveEntity;
@@ -32,8 +30,14 @@ public class TestCarEntity extends AnimalEntity implements GeoEntity {
 	public TestCarEntity(EntityType<? extends AnimalEntity> entityType, World world) {
 		super(entityType, world);
 	}
-
-	private static TrackedData<Float> carSpeed = DataTracker.registerData(TestCarEntity.class, TrackedDataHandlerRegistry.FLOAT);
+	public static float DEFAULT_ACCELERATION = 0.014f;
+	public static float DEFAULT_MAX_SPEED = 0.6f;
+	private static float ACCELERATION = DEFAULT_ACCELERATION;
+	private static float MAX_SPEED = DEFAULT_MAX_SPEED;
+	public static float ROTATION_AMOUNT = 0.3f;
+	public static float MAX_ROTATION = 15.0f;
+	private static final TrackedData<Float> carSpeed = DataTracker.registerData(TestCarEntity.class, TrackedDataHandlerRegistry.FLOAT);
+	private static final TrackedData<Float> carRotation = DataTracker.registerData(TestCarEntity.class, TrackedDataHandlerRegistry.FLOAT);
 
 	@Override
 	public ActionResult interactMob(PlayerEntity player, Hand hand) {
@@ -49,13 +53,6 @@ public class TestCarEntity extends AnimalEntity implements GeoEntity {
 
 		return super.interactMob(player, hand);
 	}
-	public static float DEFAULT_ACCELERATION = 0.014f;
-	public static float DEFAULT_MAX_SPEED = 0.6f;
-	private static float ACCELERATION = DEFAULT_ACCELERATION;
-	private static float MAX_SPEED = DEFAULT_MAX_SPEED;
-	private float carRotation = 0.0f;
-	public static float ROTATION_AMOUNT = 0.3f;
-	public static float MAX_ROTATION = 15.0f;
 
 	public static void SetMaxSpeed(double speed) {
 		MAX_SPEED = (float) speed;
@@ -76,6 +73,7 @@ public class TestCarEntity extends AnimalEntity implements GeoEntity {
 	protected void initDataTracker() {
 		super.initDataTracker();
 		this.dataTracker.startTracking(carSpeed,0.0f);
+		this.dataTracker.startTracking(carRotation,0.0f);
 	}
 
 	@Override
@@ -84,6 +82,7 @@ public class TestCarEntity extends AnimalEntity implements GeoEntity {
 			this.prevYaw = getYaw();
 			this.prevPitch = getPitch();
 			float gotCarSpeed = this.dataTracker.get(carSpeed);
+			float gotCarRotation = this.dataTracker.get(carRotation);
 			if (this.hasPassengers()) {
 				LivingEntity passenger = getPrimaryPassenger();
 				assert passenger != null;
@@ -132,31 +131,31 @@ public class TestCarEntity extends AnimalEntity implements GeoEntity {
 
 				// if player is trying to go sideways
 				float rotationSpeed = Math.abs(gotCarSpeed) * 0.9f;
-				float rotationAmount = carRotation * rotationSpeed;
+				float rotationAmount = gotCarRotation * rotationSpeed;
 				if (passenger.sidewaysSpeed > 0 || passenger.sidewaysSpeed < 0) {
 					// rotate to that direction
-					carRotation += (passenger.sidewaysSpeed > 0) ? -ROTATION_AMOUNT : ROTATION_AMOUNT;
-					if (carRotation > MAX_ROTATION)
-						carRotation = MAX_ROTATION;
-					if (carRotation < -MAX_ROTATION)
-						carRotation = -MAX_ROTATION;
+					gotCarRotation += (passenger.sidewaysSpeed > 0) ? -ROTATION_AMOUNT : ROTATION_AMOUNT;
+					if (gotCarRotation > MAX_ROTATION)
+						gotCarRotation = MAX_ROTATION;
+					if (gotCarRotation < -MAX_ROTATION)
+						gotCarRotation = -MAX_ROTATION;
 					// if going on reverse then reverse the rotation
 					if (gotCarSpeed < 0) {
 						rotationAmount = -rotationAmount;
 					}
 				}
 				// else take the rotation back to 0
-				else if (carRotation != 0){
+				else if (gotCarRotation != 0){
 					if (gotCarSpeed >= 0) {
-						carRotation += (carRotation > 0) ? -(ROTATION_AMOUNT * 3) : (ROTATION_AMOUNT * 3);
-						if (Math.abs(carRotation) <= ROTATION_AMOUNT * 3) {
-							carRotation = 0;
+						gotCarRotation += (gotCarRotation > 0) ? -(ROTATION_AMOUNT * 3) : (ROTATION_AMOUNT * 3);
+						if (Math.abs(gotCarRotation) <= ROTATION_AMOUNT * 3) {
+							gotCarRotation = 0;
 						}
 					}
 					else {
 						// carRotation += (carRotation > 0) ? -(ROTATION_AMOUNT) : (ROTATION_AMOUNT);
 						// if (Math.abs(carRotation) <= ROTATION_AMOUNT) {
-							carRotation = 0;
+						gotCarRotation = 0;
 						// }
 					}
 				}
@@ -168,8 +167,8 @@ public class TestCarEntity extends AnimalEntity implements GeoEntity {
 						this.bodyYaw = this.getYaw() + rotationAmount;
 						passenger.setYaw(passenger.getYaw() + rotationAmount);
 						if (gotCarSpeed > 0) {
-							this.setHeadYaw(this.getYaw() + carRotation * 3);
-							this.headYaw = this.getHeadYaw() + carRotation * 3;
+							this.setHeadYaw(this.getYaw() + gotCarRotation * 3);
+							this.headYaw = this.getHeadYaw() + gotCarRotation * 3;
 						}
 						this.setRotation(this.getYaw(), this.getPitch());
 					}
@@ -177,7 +176,7 @@ public class TestCarEntity extends AnimalEntity implements GeoEntity {
 				}
 				else {
 					this.serverYaw = this.getYaw();
-					this.setHeadYaw(this.getYaw() + carRotation);
+					this.setHeadYaw(this.getYaw() + gotCarRotation);
 					this.setRotation(this.getYaw(), this.getPitch());
 				}
 
@@ -187,9 +186,9 @@ public class TestCarEntity extends AnimalEntity implements GeoEntity {
 						Text.of(
 							String.format(
 								"Sp %.1f / %.1f;Rot %.2f / %.2f;Yaw %.2f; %s;Pos %.1f %.1f %.1f",
-								gotCarSpeed * 10,
+								this.dataTracker.get(carSpeed) * 10,
 								MAX_SPEED * 10,
-								carRotation,
+								this.dataTracker.get(carRotation),
 								MAX_ROTATION,
 								this.getYaw(),
 								(Math.signum(gotCarSpeed) == 1) ? "+" : (Math.signum(gotCarSpeed) == -1) ? "-" : "0",
@@ -211,8 +210,9 @@ public class TestCarEntity extends AnimalEntity implements GeoEntity {
 				} else {
 					this.setMovementSpeed(Math.abs(gotCarSpeed));
 				}
-				super.travel(new Vec3d(0, pos.y, forwardSpeed + gotCarSpeed));
+				super.travel(new Vec3d(0, pos.y, (forwardSpeed / 10) + gotCarSpeed));
 				this.dataTracker.set(carSpeed,gotCarSpeed);
+				this.dataTracker.set(carRotation,gotCarRotation);
 			} else {
 				gotCarSpeed += (gotCarSpeed > 0) ? -(ACCELERATION) : (ACCELERATION);
 				if (Math.abs(gotCarSpeed) <= ACCELERATION) {
@@ -221,6 +221,7 @@ public class TestCarEntity extends AnimalEntity implements GeoEntity {
 				this.setMovementSpeed(Math.abs(gotCarSpeed));
 				super.travel(new Vec3d(0, pos.y, pos.z + gotCarSpeed));
 				this.dataTracker.set(carSpeed,gotCarSpeed);
+				this.dataTracker.set(carRotation,gotCarRotation);
 			}
 		}
 	}
@@ -241,7 +242,7 @@ public class TestCarEntity extends AnimalEntity implements GeoEntity {
 	public void updatePassengerPosition(Entity entity, PositionUpdater moveFunction) {
 		super.updatePassengerPosition(entity, moveFunction);
 
-		if (entity instanceof LivingEntity passenger) {
+		if (entity instanceof LivingEntity _passenger) {
 			moveFunction.accept(entity, getX(), getY() - 0.1f, getZ());
 		}
 	}
