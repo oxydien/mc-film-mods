@@ -23,7 +23,7 @@ public class EarthBlock extends Block {
 	public static final EarthBlock EARTH_BLOCK = new EarthBlock(QuiltBlockSettings.copyOf(Blocks.STONE));
 	@Override // OnClick()
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-		if (!world.isClient) {
+		if (!world.isClient()) {
 			Integer Rotation = state.get(ROTATION) + 1;
 			if (Rotation > 3) {
 				Rotation = 0;

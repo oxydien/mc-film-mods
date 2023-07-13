@@ -36,7 +36,7 @@ public class PapersBlock extends BookBlock{
 
 	@Override
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-		if (!world.isClient) {
+		if (!world.isClient()) {
 			ItemStack heldItem = player.getStackInHand(hand);
 			if (heldItem.isEmpty()) {
 				int paperCount = state.get(PAPERCOUNT);

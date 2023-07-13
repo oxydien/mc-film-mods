@@ -34,7 +34,7 @@ public class BookBlock extends Block {
 	public static final BookBlock BOOK_BLOCK = new BookBlock(QuiltBlockSettings.copyOf(Blocks.STONE));
 	@Override
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-		if (!world.isClient) {
+		if (!world.isClient()) {
 			ItemStack heldItem = player.getStackInHand(hand);
 			if (heldItem.isEmpty()) {
 				int bookCount = state.get(BOOK_COUNT);
@@ -72,13 +72,5 @@ public class BookBlock extends Block {
 		int bookCount = state.get(BOOK_COUNT);
 		float height = BASE_HEIGHT + (bookCount - 1) * HEIGHT_INCREMENT;
 		return VoxelShapes.cuboid(0.25f, 0.0f, 0.25f, 0.70f, height, 0.70f);
-	}
-
-	@Override
-	public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
-		BlockPos blockBelowPos = pos.down();
-		BlockState blockBelowState = world.getBlockState(blockBelowPos);
-		Block blockBelow = blockBelowState.getBlock();
-		return !blockBelow.isShapeFullCube(blockBelowState, world, blockBelowPos);
 	}
 }

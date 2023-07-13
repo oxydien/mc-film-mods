@@ -1,9 +1,14 @@
 package dev.oxydien.mbtym.entity.entities;
 
 import dev.oxydien.mbtym.InitMod;
+import io.netty.handler.codec.DatagramPacketDecoder;
 import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandler;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -28,6 +33,8 @@ public class TestCarEntity extends AnimalEntity implements GeoEntity {
 		super(entityType, world);
 	}
 
+	private static TrackedData<Float> carSpeed = DataTracker.registerData(TestCarEntity.class, TrackedDataHandlerRegistry.FLOAT);
+
 	@Override
 	public ActionResult interactMob(PlayerEntity player, Hand hand) {
 		if (!this.hasPassengers()) {
@@ -42,8 +49,6 @@ public class TestCarEntity extends AnimalEntity implements GeoEntity {
 
 		return super.interactMob(player, hand);
 	}
-
-	private float carSpeed = 0.0f;
 	public static float DEFAULT_ACCELERATION = 0.014f;
 	public static float DEFAULT_MAX_SPEED = 0.6f;
 	private static float ACCELERATION = DEFAULT_ACCELERATION;
@@ -68,10 +73,17 @@ public class TestCarEntity extends AnimalEntity implements GeoEntity {
 	}
 
 	@Override
+	protected void initDataTracker() {
+		super.initDataTracker();
+		this.dataTracker.startTracking(carSpeed,0.0f);
+	}
+
+	@Override
 	public void travel(Vec3d pos) {
 		if (this.isAlive()) {
 			this.prevYaw = getYaw();
 			this.prevPitch = getPitch();
+			float gotCarSpeed = this.dataTracker.get(carSpeed);
 			if (this.hasPassengers()) {
 				LivingEntity passenger = getPrimaryPassenger();
 				assert passenger != null;
@@ -81,45 +93,45 @@ public class TestCarEntity extends AnimalEntity implements GeoEntity {
 				if (forwardSpeed != 0) {
 					// Going forwards
 					if (forwardSpeed > 0) {
-						if (carSpeed < MAX_SPEED) {
-							carSpeed += ACCELERATION;
-							if (carSpeed > MAX_SPEED)
-								carSpeed = MAX_SPEED;
+						if (gotCarSpeed < MAX_SPEED) {
+							gotCarSpeed += ACCELERATION;
+							if (gotCarSpeed > MAX_SPEED)
+								gotCarSpeed = MAX_SPEED;
 						}
 						else {
-							carSpeed = MAX_SPEED;
+							gotCarSpeed = MAX_SPEED;
 						}
 						// slow down faster
-						if (carSpeed < 0) {
-							carSpeed += ACCELERATION;
+						if (gotCarSpeed < 0) {
+							gotCarSpeed += ACCELERATION;
 						}
 					}
 					// Going backwards
 					else {
-						if (carSpeed > -MAX_SPEED) {
-							carSpeed -= ACCELERATION;
-							if (carSpeed < -MAX_SPEED)
-								carSpeed = -MAX_SPEED;
+						if (gotCarSpeed > -MAX_SPEED) {
+							gotCarSpeed -= ACCELERATION;
+							if (gotCarSpeed < -MAX_SPEED)
+								gotCarSpeed = -MAX_SPEED;
 						}
 						else {
-							carSpeed = -MAX_SPEED;
+							gotCarSpeed = -MAX_SPEED;
 						}
 						// slow down faster
-						if (carSpeed > 0) {
-							carSpeed -= ACCELERATION;
+						if (gotCarSpeed > 0) {
+							gotCarSpeed -= ACCELERATION;
 						}
 					}
 				}
 				// slowly slow down
-				else if (carSpeed != 0){
-					carSpeed += (carSpeed > 0) ? -(ACCELERATION / 2) : (ACCELERATION / 2);
-					if (Math.abs(carSpeed) <= ACCELERATION / 2) {
-						carSpeed = 0;
+				else if (gotCarSpeed != 0){
+					gotCarSpeed += (gotCarSpeed > 0) ? -(ACCELERATION / 2) : (ACCELERATION / 2);
+					if (Math.abs(gotCarSpeed) <= ACCELERATION / 2) {
+						gotCarSpeed = 0;
 					}
 				}
 
 				// if player is trying to go sideways
-				float rotationSpeed = Math.abs(carSpeed) * 0.9f;
+				float rotationSpeed = Math.abs(gotCarSpeed) * 0.9f;
 				float rotationAmount = carRotation * rotationSpeed;
 				if (passenger.sidewaysSpeed > 0 || passenger.sidewaysSpeed < 0) {
 					// rotate to that direction
@@ -129,13 +141,13 @@ public class TestCarEntity extends AnimalEntity implements GeoEntity {
 					if (carRotation < -MAX_ROTATION)
 						carRotation = -MAX_ROTATION;
 					// if going on reverse then reverse the rotation
-					if (carSpeed < 0) {
+					if (gotCarSpeed < 0) {
 						rotationAmount = -rotationAmount;
 					}
 				}
 				// else take the rotation back to 0
 				else if (carRotation != 0){
-					if (carSpeed >= 0) {
+					if (gotCarSpeed >= 0) {
 						carRotation += (carRotation > 0) ? -(ROTATION_AMOUNT * 3) : (ROTATION_AMOUNT * 3);
 						if (Math.abs(carRotation) <= ROTATION_AMOUNT * 3) {
 							carRotation = 0;
@@ -150,12 +162,12 @@ public class TestCarEntity extends AnimalEntity implements GeoEntity {
 				}
 
 				// model rotation and rotation
-				if (carSpeed != 0) {
+				if (gotCarSpeed != 0) {
 					if (this.getWorld().isClient()) {
 						this.setYaw(this.getYaw() + rotationAmount);
 						this.bodyYaw = this.getYaw() + rotationAmount;
 						passenger.setYaw(passenger.getYaw() + rotationAmount);
-						if (carSpeed > 0) {
+						if (gotCarSpeed > 0) {
 							this.setHeadYaw(this.getYaw() + carRotation * 3);
 							this.headYaw = this.getHeadYaw() + carRotation * 3;
 						}
@@ -175,12 +187,12 @@ public class TestCarEntity extends AnimalEntity implements GeoEntity {
 						Text.of(
 							String.format(
 								"Sp %.1f / %.1f;Rot %.2f / %.2f;Yaw %.2f; %s;Pos %.1f %.1f %.1f",
-								carSpeed * 10,
+								gotCarSpeed * 10,
 								MAX_SPEED * 10,
 								carRotation,
 								MAX_ROTATION,
 								this.getYaw(),
-								(Math.signum(carSpeed) == 1) ? "+" : (Math.signum(carSpeed) == -1) ? "-" : "0",
+								(Math.signum(gotCarSpeed) == 1) ? "+" : (Math.signum(gotCarSpeed) == -1) ? "-" : "0",
 								this.getPos().x,
 								this.getPos().y,
 								this.getPos().z
@@ -188,25 +200,27 @@ public class TestCarEntity extends AnimalEntity implements GeoEntity {
 				}
 
 				// Same direction
-				if ((carSpeed > 0 && forwardSpeed > 0) ||
-					(carSpeed < 0 && forwardSpeed < 0)) {
-					this.setMovementSpeed(Math.abs(carSpeed));
+				if ((gotCarSpeed > 0 && forwardSpeed > 0) ||
+					(gotCarSpeed < 0 && forwardSpeed < 0)) {
+					this.setMovementSpeed(Math.abs(gotCarSpeed));
 				// Opposite direction
-				} else if ((carSpeed < 0 && forwardSpeed > 0) ||
-					(carSpeed > 0 && forwardSpeed < 0)) {
-					this.setMovementSpeed(-Math.abs(carSpeed));
+				} else if ((gotCarSpeed < 0 && forwardSpeed > 0) ||
+					(gotCarSpeed > 0 && forwardSpeed < 0)) {
+					this.setMovementSpeed(-Math.abs(gotCarSpeed));
 				// zero
 				} else {
-					this.setMovementSpeed(Math.abs(carSpeed));
+					this.setMovementSpeed(Math.abs(gotCarSpeed));
 				}
-				super.travel(new Vec3d(0, pos.y, forwardSpeed + carSpeed));
+				super.travel(new Vec3d(0, pos.y, forwardSpeed + gotCarSpeed));
+				this.dataTracker.set(carSpeed,gotCarSpeed);
 			} else {
-				carSpeed += (carSpeed > 0) ? -(ACCELERATION) : (ACCELERATION);
-				if (Math.abs(carSpeed) <= ACCELERATION) {
-					carSpeed = 0;
+				gotCarSpeed += (gotCarSpeed > 0) ? -(ACCELERATION) : (ACCELERATION);
+				if (Math.abs(gotCarSpeed) <= ACCELERATION) {
+					gotCarSpeed = 0;
 				}
-				this.setMovementSpeed(Math.abs(carSpeed));
-				super.travel(new Vec3d(0, pos.y, pos.z + carSpeed));
+				this.setMovementSpeed(Math.abs(gotCarSpeed));
+				super.travel(new Vec3d(0, pos.y, pos.z + gotCarSpeed));
+				this.dataTracker.set(carSpeed,gotCarSpeed);
 			}
 		}
 	}
