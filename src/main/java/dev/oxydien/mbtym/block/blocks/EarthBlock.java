@@ -24,7 +24,7 @@ public class EarthBlock extends Block {
 	@Override // OnClick()
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 		if (!world.isClient()) {
-			Integer Rotation = state.get(ROTATION) + 1;
+			int Rotation = state.get(ROTATION) + 1;
 			if (Rotation > 3) {
 				Rotation = 0;
 			}

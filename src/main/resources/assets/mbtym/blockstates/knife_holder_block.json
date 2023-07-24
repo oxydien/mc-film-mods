@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "knife_number=0": {
+      "model": "mbtym:block/knife_holder_block_4"
+    },
+    "knife_number=1": {
+      "model": "mbtym:block/knife_holder_block_3"
+    },
+    "knife_number=2": {
+      "model": "mbtym:block/knife_holder_block_2"
+    },
+    "knife_number=3": {
+      "model": "mbtym:block/knife_holder_block_1"
+    }
+  }
+}

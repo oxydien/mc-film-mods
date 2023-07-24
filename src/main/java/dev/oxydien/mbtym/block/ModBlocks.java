@@ -20,6 +20,8 @@ public class ModBlocks {
 	public static Block EARTH_BLOCK = registerblock("earth_block", EarthBlock.EARTH_BLOCK);
 	public static Block BOOK_BLOCK = registerblock("books_block", BookBlock.BOOK_BLOCK);
 	public static Block PAPERS_BLOCK = registerblock("papers_block", PapersBlock.PAPERS_BLOCK);
+	public static Block KNIFE_HOLDER_BLOCK = registerblock("knife_holder_block", KnifeHolderBlock.KNIFE_HOLDER_BLOCK);
+	public static Block DOG_FEEDER_BLOCK = registerblock("dog_feeder_block",new Block(QuiltBlockSettings.copyOf(Blocks.FLOWER_POT).nonOpaque()));
 	public static Block COFFEE_MACHINE_BLOCK = Registry.register(Registries.BLOCK,
 		new Identifier(InitMod.MOD_ID, "coffee_machine_block"),
 		new CoffeeMachineBlock(QuiltBlockSettings.copyOf(Blocks.STONE).nonOpaque()));

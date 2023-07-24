@@ -4,12 +4,21 @@
   "item.mbtym.tablet": "Tablet",
   "item.mbtym.telephone": "Telephone",
   "item.mbtym.cup_of_coffee": "Cup of coffee",
+  "item.mbtym.knife_item": "Knife",
   "item.mbtym.telephone_used": "Using the TELEPHONE",
   "item.mbtym.heavy_air_bucket": "Heavy Air Bucket",
-  "item.mbtym.test_car_spawn_egg": "CAR",
+  "item.mbtym.test_car_spawn_egg": "Test CAR",
+  "item.mbtym.white_car_spawn_egg": "White CAR",
+  "item.mbtym.red_car_spawn_egg": "Red CAR",
+  "item.mbtym.blue_car_spawn_egg": "Blue CAR",
+  "item.mbtym.blue_long_car_spawn_egg": "Blue Long CAR",
+  "item.mbtym.red_long_car_spawn_egg": "Red Long CAR",
+  "item.mbtym.orange_long_car_spawn_egg": "Orange Long CAR",
   "item.mbtym.debug_item": "Debug item",
 
   "block.mbtym.timer": "Timer",
+  "block.mbtym.dog_feeder_block": "Dog Feeder",
+  "block.mbtym.knife_holder_block": "Knife Holder",
   "block.mbtym.earth_block": "Earth Block",
   "block.mbtym.books_block": "Books",
   "block.mbtym.papers_block": "Papers",
@@ -17,7 +26,13 @@
 
   "itemGroup.mbtym.mbtym": "Masa Blocks",
 
-  "entity.mbtym.test_car": "CAR",
+  "entity.mbtym.test_car": "Test CAR",
+  "entity.mbtym.white_car": "White CAR",
+  "entity.mbtym.red_car": "Red CAR",
+  "entity.mbtym.blue_car": "Blue CAR",
+  "entity.mbtym.blue_long_car": "Blue Long CAR",
+  "entity.mbtym.red_long_car": "Red Long CAR",
+  "entity.mbtym.orange_long_car": "Orange Long CAR",
 
 
   "ui.debug_ui.text.label": "MBTYM gui",

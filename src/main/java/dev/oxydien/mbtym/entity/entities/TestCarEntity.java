@@ -167,7 +167,7 @@ public class TestCarEntity extends AnimalEntity implements GeoEntity {
 						this.bodyYaw = this.getYaw() + rotationAmount;
 						passenger.setYaw(passenger.getYaw() + rotationAmount);
 						if (gotCarSpeed > 0) {
-							this.setHeadYaw(this.getYaw() + gotCarRotation * 3);
+							this.setHeadYaw(this.getYaw() + gotCarRotation);
 							this.headYaw = this.getHeadYaw() + gotCarRotation * 3;
 						}
 						this.setRotation(this.getYaw(), this.getPitch());
@@ -181,7 +181,7 @@ public class TestCarEntity extends AnimalEntity implements GeoEntity {
 				}
 
 				// Debug chat message
-				if (InitMod.DoDebug && !this.getWorld().isClient()) {
+				if (InitMod.DoDebug && this.getWorld().isClient()) {
 					passenger.sendSystemMessage(
 						Text.of(
 							String.format(
@@ -211,8 +211,6 @@ public class TestCarEntity extends AnimalEntity implements GeoEntity {
 					this.setMovementSpeed(Math.abs(gotCarSpeed));
 				}
 				super.travel(new Vec3d(0, pos.y, (forwardSpeed / 10) + gotCarSpeed));
-				this.dataTracker.set(carSpeed,gotCarSpeed);
-				this.dataTracker.set(carRotation,gotCarRotation);
 			} else {
 				gotCarSpeed += (gotCarSpeed > 0) ? -(ACCELERATION) : (ACCELERATION);
 				if (Math.abs(gotCarSpeed) <= ACCELERATION) {
@@ -220,9 +218,9 @@ public class TestCarEntity extends AnimalEntity implements GeoEntity {
 				}
 				this.setMovementSpeed(Math.abs(gotCarSpeed));
 				super.travel(new Vec3d(0, pos.y, pos.z + gotCarSpeed));
-				this.dataTracker.set(carSpeed,gotCarSpeed);
-				this.dataTracker.set(carRotation,gotCarRotation);
 			}
+			this.dataTracker.set(carSpeed,gotCarSpeed);
+			this.dataTracker.set(carRotation,gotCarRotation);
 		}
 	}
 
@@ -272,11 +270,11 @@ public class TestCarEntity extends AnimalEntity implements GeoEntity {
 	private <T extends GeoAnimatable> PlayState predicate(AnimationState<T> tAnimationState) {
 		if (tAnimationState.isMoving()) {
 			tAnimationState.getController().setAnimation(RawAnimation.begin()
-				.then("ride", Animation.LoopType.LOOP));
+				.then("riding", Animation.LoopType.LOOP));
 		}
 		else  {
 			tAnimationState.getController().setAnimation(RawAnimation.begin()
-				.then("idle", Animation.LoopType.LOOP));
+				.then("starting", Animation.LoopType.LOOP));
 		}
 		return PlayState.CONTINUE;
 	}

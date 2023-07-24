@@ -3,6 +3,7 @@ package dev.oxydien.mbtym;
 import dev.oxydien.mbtym.block.ModBlocks;
 import dev.oxydien.mbtym.block.entity.ModBlockEntities;
 import dev.oxydien.mbtym.entity.ModEntities;
+import dev.oxydien.mbtym.entity.entities.SimpleCarEntity;
 import dev.oxydien.mbtym.entity.entities.TestCarEntity;
 import dev.oxydien.mbtym.fluid.ModFluid;
 import dev.oxydien.mbtym.item.ModItems;
@@ -51,7 +52,6 @@ public class InitMod implements ModInitializer {
 		ModItems.registerModItems();
 		ModBlocks.registerModBlocks();
 		ModEntities.registerModEntities();
-		FabricDefaultAttributeRegistry.register(ModEntities.TEST_CAR, TestCarEntity.setAttributes());
 		ModBlockEntities.registerBlockEntities();
 		ModFluid.register();
 		Log("Loaded!");

@@ -3,6 +3,7 @@ package dev.oxydien.mbtym;
 import dev.oxydien.mbtym.block.entity.ModBlockEntities;
 import dev.oxydien.mbtym.block.entity.renderer.CoffeeMachineRenderer;
 import dev.oxydien.mbtym.entity.ModEntities;
+import dev.oxydien.mbtym.entity.renderers.SimpleCars.*;
 import dev.oxydien.mbtym.entity.renderers.TestCarEntityRenderer;
 import dev.oxydien.mbtym.fluid.ModFluid;
 import net.fabricmc.api.ClientModInitializer;
@@ -29,6 +30,12 @@ public class ClientInitMod implements ClientModInitializer {
 
 
 		EntityRendererRegistry.register(ModEntities.TEST_CAR, TestCarEntityRenderer::new);
+		EntityRendererRegistry.register(ModEntities.WHITE_CAR, WhiteCarRenderer::new);
+		EntityRendererRegistry.register(ModEntities.BLUE_CAR, BlueCarRenderer::new);
+		EntityRendererRegistry.register(ModEntities.BLUE_LONG_CAR, BlueLongCarRenderer::new);
+		EntityRendererRegistry.register(ModEntities.RED_CAR, RedCarRenderer::new);
+		EntityRendererRegistry.register(ModEntities.RED_LONG_CAR, RedLongCarRenderer::new);
+		EntityRendererRegistry.register(ModEntities.ORANGE_LONG_CAR, OrangeLongCarRenderer::new);
 
 		BlockEntityRendererFactories.register(ModBlockEntities.COFFEE_MACHINE_ENTITY, CoffeeMachineRenderer::new);
 	}

@@ -8,5 +8,6 @@ import software.bernie.geckolib.renderer.GeoEntityRenderer;
 public class TestCarEntityRenderer extends GeoEntityRenderer<TestCarEntity> {
 	public TestCarEntityRenderer(EntityRendererFactory.Context renderManager) {
 		super(renderManager, new TestCarEntityModel());
+		this.withScale(1.5f);
 	}
 }

@@ -27,6 +27,7 @@ public class CoffeeMachineBlock extends BlockWithEntity {
 	public CoffeeMachineBlock(Settings settings) {
 		super(settings);
 	}
+	public static Boolean changed = false;
 
 	@Nullable
 	@Override
@@ -36,7 +37,8 @@ public class CoffeeMachineBlock extends BlockWithEntity {
 
 	@Override
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-		if (!world.isClient()){
+		changed = !changed;
+		if (!world.isClient() && changed){
 			player.giveItemStack(new ItemStack(ModItems.CUP_OF_COFFEE));
 		}
 		return ActionResult.PASS;
